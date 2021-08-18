@@ -5,9 +5,9 @@
 	<view class="mm_item" @click="openBrowser()" v-else-if="url.indexOf('http:') === 0 || url.indexOf('https:') === 0">
 		<slot></slot>
 	</view>
-	<router-link class="mm_item" :to="url" v-else>
+	<navigator class="mm_item" :url="url" v-else>
 		<slot></slot>
-	</router-link>
+	</navigator>
 </template>
 
 <script>
