@@ -1,78 +1,83 @@
 <template>
-	<!-- 轮播图 -->
-	<view class="swiper_image">
-		<view class="swiper-container" :id="id" >
-			<swiper class="swiper swiper-wrapper">
-				<swiper-item class="swiper-slide" v-for="(o, idx) in list" :key="idx">
-					<slot :row="o" :index="idx"></slot>
-				</swiper-item>
-			</swiper>
-			<view class="swiper-button-prev"></view>
-			<view class="swiper-button-next"></view>
-			<view class="swiper-pagination"></view>
-		</view>
+	<view class="swiper_img">
+		<swiper class="swiper" :indicator-color="indicatorColor" :indicator-active-color="indicatorActiveColor"
+			:indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration">
+			<swiper-item v-for="(o, i) in list" :key="i">
+				<image v-if="o[vm.img]" :src="$fullImgUrl(o[vm.img])"></image><text class="title"
+					v-if="show_title && o[vm.title]">{{ o[vm.title] }}</text>
+			</swiper-item>
+		</swiper>
 	</view>
-
 </template>
 
 <script>
-	import mixin from '@/mixins/component.js';
-
 	export default {
-		mixins: [mixin],
 		props: {
-			id: {
+			show_title: {
 				type: String,
-				default: "id"
+				default: ""
+			},
+			list: {
+				type: Array,
+				default: function() {
+					return [];
+				}
+			},
+			vm: {
+				type: Object,
+				default: function() {
+					return {
+						img: "img",
+						title: "title"
+					}
+				}
+			}
+		},
+		data() {
+			return {
+				background: ['color1', 'color2', 'color3'],
+				indicatorDots: true,
+				indicatorColor: "rgba(0, 0, 0, .3)",
+				indicatorActiveColor: "#fff",
+				autoplay: true,
+				interval: 2000,
+				duration: 500
 			}
 		},
 		methods: {
-			doing() {
-				// var swiper = new this.$Swiper('#' + this.id, {
-				// 	speed: 350,
-				// 	autoplay: {
-				// 		delay: 2800,
-				// 		disableOnInteraction: false,
-				// 		waitForTransition: false,
-				// 	},
-				// 	centeredSlides: true,
-				// 	slidesPerView: 1,
-				// 	pagination: {
-				// 		el: '.swiper-pagination',
-				// 		clickable: true,
-				// 		dynamicBullets: true,
-				// 	},
-				// 	navigation: {
-				// 		nextEl: '.swiper-button-next',
-				// 		prevEl: '.swiper-button-prev',
-				// 	},
-				// });
+			changeIndicatorDots(e) {
+				this.indicatorDots = !this.indicatorDots
+			},
+			changeAutoplay(e) {
+				this.autoplay = !this.autoplay
+			},
+			intervalChange(e) {
+				this.interval = e.target.value
+			},
+			durationChange(e) {
+				this.duration = e.target.value
 			}
-		},
-		onShow() {
-			setTimeout(() => {
-				this.doing()
-			}, 300)
 		}
 	}
 </script>
 
 <style>
-	.swiper_image .swiper-slide {
-		width: calc(100% - 4rem);
-		padding: 1rem 0 3rem 0;
-		height: 18.75rem;
+	
+		.swiper_img .swiper {
+			height: 230rpx;
+		}
 
-	}
 
-	.swiper_image .swiper-container {
-		user-select: none;
-	}
-
-	.swiper_image .mm_icon {
+	.swiper_img image {
 		width: 100%;
-		border-radius: 0.25rem;
-		height: 10rem;
-		margin: auto;
+		height: 100%;
+	}
+
+	.swiper_img .title {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
 	}
 </style>
