@@ -2,9 +2,11 @@
 	<view class="swiper_img">
 		<swiper class="swiper" :indicator-color="indicatorColor" :indicator-active-color="indicatorActiveColor"
 			:indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration">
-			<swiper-item v-for="(o, i) in list" :key="i">
-				<image v-if="o[vm.img]" :src="$fullImgUrl(o[vm.img])"></image><text class="title"
-					v-if="show_title && o[vm.title]">{{ o[vm.title] }}</text>
+			<swiper-item v-for="(o, i) in list" :key="i" @click="$nav(o.url)">
+				<!-- <navigator :url="o[vm.url]"> -->
+					<image class="image" v-if="o[vm.img]" :src="$fullImgUrl(o[vm.img])"></image>
+					<text class="title" v-if="show_title && o[vm.title]">{{ o[vm.title] }}</text>
+				<!-- </navigator> -->
 			</swiper-item>
 		</swiper>
 	</view>
@@ -31,17 +33,26 @@
 						title: "title"
 					}
 				}
+			},
+			interval: {
+				type: Number,
+				default: 4000
+			},
+			duration: {
+				type: Number,
+				default: 500
+			},
+			indicatorDots: {
+				type: Boolean,
+				default: false
 			}
 		},
 		data() {
 			return {
 				background: ['color1', 'color2', 'color3'],
-				indicatorDots: true,
 				indicatorColor: "rgba(0, 0, 0, .3)",
 				indicatorActiveColor: "#fff",
-				autoplay: true,
-				interval: 2000,
-				duration: 500
+				autoplay: true
 			}
 		},
 		methods: {
@@ -62,13 +73,7 @@
 </script>
 
 <style>
-	
-		.swiper_img .swiper {
-			height: 230rpx;
-		}
-
-
-	.swiper_img image {
+	.swiper_img .image {
 		width: 100%;
 		height: 100%;
 	}

@@ -1,4 +1,4 @@
-<template xlang="wxml" minapp="mpvue">
+<template>
 	<view class="expand_qrcode">
 		<!-- #ifndef MP-ALIPAY -->
 		<canvas class="expand_qrcode-canvas" :canvas-id="ide" :style="{width: se + 'px', height: se + 'px'}" />
@@ -12,13 +12,13 @@
 
 <script>
 	import QRCode from "@/plugins/qrcode.js"
-
+	let qrcode;
 	export default {
 		name: "expand_qrcode",
 		props: {
-			id: {
+			ide: {
 				type: String,
-				default: ""
+				default: "expand_qrcode"
 			},
 			value: {
 				type: String,
@@ -31,10 +31,6 @@
 			url: {
 				type: String,
 				default: ""
-			},
-			width: {
-				type: Number,
-				default: 0
 			},
 			height: {
 				type: Number,
@@ -99,15 +95,13 @@
 		},
 		data() {
 			return {
-				qrcode: {},
-				ide: this.id || 'qrcode_' + Date.now() + Math.ceil(Math.random() * 100),
-				result: '',
+				result: ''
 			}
 		},
 		methods: {
 			new_qrcode() {
 				let _this = this;
-				this.qrcode = new QRCode({
+				qrcode = new QRCode({
 					context: this, // 上下文环境
 					canvasId: this.ide, // canvas-id
 					usingComponents: true, // 是否是自定义组件
@@ -130,7 +124,7 @@
 			clear_qrcode() {
 				this.$emit('result', '')
 				this.result = '';
-				this.qrcode.clear()
+				qrcode.clear()
 			},
 			save_qrcode() {
 				if (this.result != "") {
@@ -175,6 +169,7 @@
 <style>
 	.expand_qrcode {
 		position: relative;
+		margin: auto;
 	}
 
 	.expand_qrcode-canvas {
@@ -187,7 +182,12 @@
 	.expand_qrcode canvas {
 		margin: auto;
 	}
+	
 	.expand_qrcode image {
 		margin: auto;
+	}
+	
+	.expand_qrcode {
+		text-align: center;
 	}
 </style>
