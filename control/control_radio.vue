@@ -4,8 +4,7 @@
     <view class="value" v-bind:class="{'disabled': disabled }">
       <label v-for="(o, idx) in options" :key="idx" :class="{ 'active': value == o[field] }"
         @click="$emit('input', $event.target.value)">
-        <input type="radio" :name="name" :value="o[field]" />
-        <slot :row="o"><text class="figure"></text><text class="name">{{ o.name }}</text></slot>
+        <slot :row="o"><text class="figure"></text><text class="name" @click="o[field]">{{ o.name }}</text></slot>
       </label>
     </view>
     <view class="tip" v-if="tip">{{ tip }}</view>
