@@ -1,7 +1,7 @@
 <template>
 	<view class="nav_menu">
 		<mm_list>
-			<mm_item v-for="(o, i) in list" :url="o[vm.url]">
+			<mm_item v-for="(o, i) in list" :key="i" :url="o[vm.url]">
 				<view class="item_menu">
 					<mm_icon v-if="o[vm.img]" :src="o[vm.img]"></mm_icon>
 					<text class="title" v-if="show_title && o[vm.title]">{{ o[vm.title] }}</text>
