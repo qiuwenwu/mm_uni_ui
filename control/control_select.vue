@@ -2,8 +2,8 @@
 	<view class="control_select">
 		<view class="title" v-if="title" v-html="title"></view>
 		<view class="value" v-bind:class="{'disabled': disabled }">
-			<picker :value="v" :range="options" :range-key="rangeKey" @change="set">
-				<label>{{ options[index].name }}</label>
+			<picker :value="index" :range="options" :range-key="rangeKey" @change="set">
+				<view>{{ options[index].name }}</view>
 			</picker>
 		</view>
 		<view class="tip" v-if="tip">{{ tip }}</view>
@@ -17,20 +17,37 @@
 		props: {
 			rangeKey: {
 				type: String,
-				default: "value"
+				default: "name"
+			}
+		},
+		data() {
+			return {
+				index: 0
 			}
 		},
 		methods: {
 			set: function set(e) {
-				var value = e.target.value;
+				var index = e.target.value;
+				var value = this.options[index].value;
+				this.index = index;
 				this.$emit("input", value);
 				if (this.value !== value) {
-					this.$emit("change");
+					this.$emit("change", value);
 				}
 			},
 			click_fun: function click_fun(value) {
 				this.$emit("input", value);
 				this.func(value);
+			},
+			update_index(){
+				var list = this.options;
+				for (var i = 0; i < list.length; i++) {
+					var o = list[i];
+					if(o.value == this.value){
+						this.index = i;
+						break;
+					}
+				}
 			}
 		},
 		computed: {
@@ -50,6 +67,14 @@
 				}
 
 				return name;
+			}
+		},
+		onShow(){
+			this.update_index();
+		},
+		watch: {
+			value() {
+				this.update_index();
 			}
 		}
 	};
