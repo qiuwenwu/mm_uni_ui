@@ -3,7 +3,9 @@
 		<view class="title" v-if="title" v-html="title"></view>
 		<view class="value" v-bind:class="{'disabled': disabled }">
 			<picker :value="index" :range="options" :range-key="rangeKey" @change="set">
-				<view>{{ options[index].name }}</view>
+				<slot :data="options[index]">
+					<view>{{ options[index].name }}</view>
+				</slot>
 			</picker>
 		</view>
 		<view class="tip" v-if="tip">{{ tip }}</view>
@@ -18,6 +20,10 @@
 			rangeKey: {
 				type: String,
 				default: "name"
+			},
+			field: {
+				type: String,
+				default: "value"
 			}
 		},
 		data() {
@@ -28,22 +34,22 @@
 		methods: {
 			set: function set(e) {
 				var index = e.target.value;
-				var value = this.options[index].value;
+				var value = this.options[index][this.field];
 				this.index = index;
 				this.$emit("input", value);
 				if (this.value !== value) {
-					this.$emit("change", value);
+					this.$emit("change", index, value);
 				}
 			},
 			click_fun: function click_fun(value) {
 				this.$emit("input", value);
 				this.func(value);
 			},
-			update_index(){
+			update_index() {
 				var list = this.options;
 				for (var i = 0; i < list.length; i++) {
 					var o = list[i];
-					if(o.value == this.value){
+					if (o.value == this.value) {
 						this.index = i;
 						break;
 					}
@@ -69,8 +75,9 @@
 				return name;
 			}
 		},
-		onShow(){
+		created() {
 			this.update_index();
+			console.log("下表2", this.index);
 		},
 		watch: {
 			value() {
